@@ -1,0 +1,7 @@
+<view class="login_title">商品评价</view>
+  <view class="input_view">
+    <textarea class="input_text" placeholder="请输入评价" type="number" value="{{content}}" bindinput="onComment"/>
+  </view>
+  <view class="loginBrnView">
+    <button class="loginBtn" type="primary" bindtap="comment">提交</button>
+  </view>

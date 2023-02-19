@@ -1,0 +1,40 @@
+<view class="nx_line">
+  <view class="nx_line_list">
+    <block wx:if="{{dataList.length===0}}">
+      <image src="../../imgs/cartNone.gif" mode="widthFix"/>
+    </block>
+    <block wx:else>
+      <view class="nx_line_item" wx:for="{{dataList}}" wx:for-item="item">
+        <navigator style="display: flex;" url="/pages/orderDetail/index?id={{item.id}}&&state={{item.state}}">
+          <view class="nx_line_left">
+            <image src="{{item.url}}" 
+          mode="scaleToFill"/>
+          </view>
+          <view class="nx_line_mid">
+            <view style="color: black;padding: 15rpx 0;">
+              订单编号:{{item.orderId}}
+            </view>
+            <view style="padding-top: 20rpx;">
+              订单状态:{{item.state}}
+            </view>
+          </view>
+          <view class="nx_line_right">
+            <text style="color: red;">￥{{item.totalPrice}}</text>
+            <text style="padding-top: 10rpx;">共{{item.count}}件</text>
+          </view>
+        </navigator>
+        <view style="text-align: right;padding: 20rpx;">
+          <text wx:if="{{item.state==='待付款'}}" style="background-color: var(--themeColor);color:white" class="btn"
+          bindtap="payGoods" data-id="{{item.id}}" data-state="待发货" data-ids="{{item.totalPrice}}" data-userId="{{item.userId}}">付款</text>
+          <text wx:if="{{item.state==='待付款'}}"  class="btn" bindtap="payGoods" data-id="{{item.id}}" data-state="已取消">取消</text>
+          <text wx:if="{{item.state==='待收货'}}" style="background-color: var(--themeColor);color:white" class="btn"
+          bindtap="payGoods" data-id="{{item.id}}" data-state="已签收">确认收货</text>
+          <text wx:if="{{item.state==='已签收'}}" style="background-color: var(--themeColor);color:white" class="btn"
+          bindtap="payGoods" data-id="{{item.id}}" data-state="申请退货中">退货</text>
+          <text wx:if="{{item.state==='已签收'||item.state==='已取消'||item.state==='完成'}}" class="btn"
+          bindtap="deleteOrder" data-id="{{item.id}}" data-state="{{item.state}}">删除</text>
+        </view>
+      </view>
+    </block>
+  </view>
+</view>

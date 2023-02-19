@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javaclimb.mapper.GoodsInfoMapper">
+    <select id="selectTypeName" resultType="com.javaclimb.entity.GoodsInfo">
+        SELECT ${ew.sqlSelect} from goods_info g left join type_info t on g.type_id=t.id ${ew.customSqlSegment}
+    </select>
+    <select id="selectFileName" resultType="com.javaclimb.entity.GoodsInfo">
+        SELECT n.file_name,g.* FROM goods_info g left JOIN nx_system_file_info n on g.id=n.goods_id ${ew.customSqlSegment}
+    </select>
+    <select id="getSalesJoinType" resultType="com.javaclimb.vo.EchartsData">
+        SELECT IFNULL(sum(g.sales),0) as `value`,t.name as name FROM goods_info g join type_info t on g.type_id=t.id ${ew.customSqlSegment}
+    </select>
+    <select id="getSales" resultType="com.javaclimb.vo.EchartsData">
+        SELECT IFNULL(sum(sales),0) as `value` ${ew.sqlSelect} FROM goods_info ${ew.customSqlSegment}
+    </select>
+</mapper>

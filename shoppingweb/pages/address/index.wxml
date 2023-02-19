@@ -1,0 +1,11 @@
+<view class="login_title">更新收货信息</view>
+  <view class="input_view">收货人:
+    <input class="input_text" placeholder="请输入收货人" type="text" value="{{linkMan}}" bindinput="onMan"/>
+    联系电话:
+    <input class="input_text" placeholder="请输入联系电话" type="number" value="{{linkPhone}}" bindinput="onPhone"/>
+    收货地址:
+    <input class="input_text" placeholder="请输入收货地址" type="text" value="{{linkAddress}}" bindinput="onAddress"/>
+  </view>
+  <view class="loginBrnView">
+    <button class="loginBtn" type="primary" bindtap="update">修改</button>
+  </view>

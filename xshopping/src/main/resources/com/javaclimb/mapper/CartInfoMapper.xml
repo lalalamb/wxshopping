@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.javaclimb.mapper.CartInfoMapper">
+    <select id="selectCartInfo" resultType="com.javaclimb.entity.GoodsInfo">
+        SELECT c.count as number,c.id as cartId,n.file_name,g.* FROM  cart_info c left JOIN goods_info g  on c.goods_id=g.id LEFT JOIN nx_system_file_info n on c.goods_id=n.goods_id WHERE c.user_id=${id} GROUP BY n.goods_id;
+    </select>
+</mapper>

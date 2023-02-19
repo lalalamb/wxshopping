@@ -1,0 +1,7 @@
+<view class="login_title">点击【登录】授权登录</view>
+ <view class="loginBtnView"> 
+  <input class="input_text" placeholder="请输入用户名" type="nickname" value="{{name}}" bindinput="onName"/>
+  <input class="input_text" placeholder="请输入密码" type="password" value="{{password}}" bindinput="onPassword"/>
+   <button class="loginBtn" type="primary" open-type="getUserInfo"
+   bindgetuserinfo="getUserInfo">登录</button>
+ </view>

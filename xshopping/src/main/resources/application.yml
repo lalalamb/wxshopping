@@ -1,0 +1,17 @@
+server:
+  port: 8888
+spring:
+  application:
+    name: shopping
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://localhost:3306/wx_shop?serverTimezone=UTC
+    username: root
+    password: SQLpass
+#    schema: classpath*:/sql/schema.sql
+#    initialization-mode: always
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 2000MB

@@ -1,0 +1,31 @@
+<!--index.wxml-->
+<view class="cates">
+  <!-- 轮播图开始 -->
+  <view class="nx_swiper">
+    <swiper autoplay indicator-dots circular interval="{{2000}}">
+      <swiper-item wx:for="{{goodsCarouselList}}" wx:key="id">
+      <navigator url="/pages/goodsInfo/index?id={{item.id}}">
+        <image src="{{item.url}}" />
+      </navigator>
+      </swiper-item>
+    </swiper>
+  </view>
+  <!-- 轮播图结束 -->
+  <view class="cates_container">
+    <scroll-view scroll-y class="left_menu">
+      <view class="menu_item {{item.id===currentIndex?'active':''}}" wx:for="{{leftMenuList}}" bindtap="handleItemTap" data-id="{{item.id}}">
+        {{item.name}}
+      </view>
+    </scroll-view>
+    <scroll-view scroll-y class="right_content">
+      <view class="goods_list">
+        <navigator url="/pages/goodsInfo/index?id={{item.id}}" style="width: 33%;" wx:for="{{rightContentList}}" wx:key="id">
+          <image src="{{item.url}}" style="height: 160rpx;"/>
+          <view>
+            {{item.name}},
+          </view>
+        </navigator>
+      </view>
+    </scroll-view>
+  </view>
+</view>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理系统</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/basic.css">
+    <link rel="stylesheet" href="../css/custom.css">
+    <link rel="stylesheet" href="../css/my.css">
+    <link rel="stylesheet" href="../css/element/index.css">
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper" v-cloak>
+        <nav class="navbar navbar-default navbar-cls-top" style="margin-bottom: 0">
+            <div>
+                <a class="navbar-brand" href="index.html">后台管理系统</a>
+            </div>
+            <div class="header-right">
+                <a href="javascript:;" class="btn btn-info" @click="logout" title="退出登录">
+                    <i class="fa fa-sign-out fa-2x"></i>
+                </a>
+            </div>
+            <div class="header-right">
+                <a href="accountUserInfo.html" class="btn btn-info" title="个人信息">
+                    <i class="fa fa-user fa-2x"></i>
+                </a>
+            </div>
+            <div class="header-right" style="padding-top: 24px;">
+                <!-- {{user.name}} -->
+                欢迎你,
+                <!--                  {{user.nickname}}-->
+            </div>
+        </nav>
+        <nav class="navbar-default navbar-side">
+            <div class="sidebar-collapse">
+                <ul class="nav" id="main-menu">
+                    <li>
+                        <a href="index.html" class="active-menu"><i class="fa fa-dashboard"></i>系统首页</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-yelp"></i>信息展示<span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse in">
+                            <li v-if="user.level===1"> <a href="userInfo.html"><i class="fa fa-table"></i>用户信息</a></li>
+                            <li> <a href="advertiserInfo.html"><i class="fa fa-table"></i>公告信息</a></li>
+                            <li> <a href="orderInfo.html"><i class="fa fa-table"></i>订单信息</a></li>
+                            <li> <a href="commentInfo.html"><i class="fa fa-table"></i>评论信息</a></li>
+                            <li v-if="user.level===1"> <a href="typeInfo.html"><i class="fa fa-table"></i>商品类别</a></li>
+                            <li> <a href="goodsInfo.html"><i class="fa fa-table"></i>商品详情</a></li>
+                        </ul>
+                    </li>
+                    <li> <a href="userDetail.html"><i class="fa fa-user"></i>个人信息</a></li>
+                    <li> <a href="updatePassword.html"><i class="fa fa-unlock-alt"></i>修改密码</a></li>
+                    <li> <a href="javascript:;" @click="logout"><i class="fa fa-power-off"></i>退出登录</a></li>
+
+                </ul>
+            </div>
+        </nav>
+        <div id="page-wrapper">
+            <div id="page-inner">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="main-box mb-olivedrab">
+                            <i class="fa fa-user"></i>
+                            <span style="margin-left: 20px">在线用户:{{headerData.onlineCount}}人</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="main-box mb-darkolivegreen">
+                            <i class="fa fa-comment"></i>
+                            <span style="margin-left: 20px">评论总数:{{headerData.commentNum}}条</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="main-box mb-burlywood">
+                            <i class="fa fa-rmb"></i>
+                            <span style="margin-left: 20px">总交易额:{{headerData.totalPrice}}元</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="main-box mb-cadetblue">
+                            <i class="fa fa-shopping-cart"></i>
+                            <span style="margin-left: 20px">总销量:{{headerData.salesAll}}件</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                            <select @change="leftChart" v-model="type">
+                                <<option v-for="item in typeObjs" :value="item.typeId" :label="item.typeName" @click="optionUnitClick(item.typeName)"></option>
+                            </select>
+                        <div class="panel-body">
+                            <div class="col-sm-6">
+                                <div id="left" style="width: 100%;height: 400px"></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div id="right" style="width: 100%;height: 400px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../js/jquery-1.10.2.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jquery.metisMenu.js"></script>
+    <script src="../js/custom.js"></script>
+    <script src="../js/my.js"></script>
+    <script src="../js/vue2.6.11/vue.min.js"></script>
+    <script src="../js/vue2.6.11/axios.js"></script>
+    <script src="../js/echarts.min.js"></script>
+    <script src="../js/element/index.js"></script>
+    <script>
+        new Vue({
+            el: "#wrapper",
+            data: {
+                user: {},
+                totalUser: 0,//用户总数
+                totalComment: 0,
+                totalPrice: 0,
+                totalCount: 0,
+                headerData:{},
+                typeObjs:[],
+                type:'',
+                typeName:'',
+                option :{
+                    title: {
+                        text: '',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        show:true
+                    },
+                    legend: {
+                        orient: 'vertical',
+                        left: 'right'
+                    },
+                    series: [
+                        {
+                            type: 'pie',
+                            radius: '50%',
+                            data: [
+                            ],
+                        }
+                    ]
+                }
+
+            },
+            created: function () {
+                this.user = JSON.parse(localStorage.getItem('user'));
+                this.getHeader();
+                axios.get("/goods/types/"+this.user.id).then(res => {//查取商品类别
+                    if (res.data.code === '0') {
+                        this.typeObjs=res.data.data;
+                        this.type=this.typeObjs[0].typeId;
+                        if(this.type){
+                            this.leftChart();
+                        }
+                    } else {
+                        msg('error', res.data.msg);
+                    }
+                });
+
+                this.rightChart();
+            },
+            methods: {
+                getHeader(){
+                    axios.get("/index/"+this.user.id+"/"+this.user.level).then(res=>{
+                        if(res.data.code==='0'){
+                            this.headerData=res.data.data;
+                        }else {
+                            msg('error', res.data.msg);
+                        }
+                    })
+                },
+                rightChart() {
+                    axios.get("/index/type/"+this.user.id+"/"+this.user.level).then(res=>{
+                    let myChart = echarts.init(document.getElementById('right'));
+                    let op=this.option;
+                    op.title.text='产品类别销量';
+                    op.series[0].data=res.data.data;
+                    myChart.setOption(op);
+                    })
+                },
+                leftChart(e){
+                    console.log(e)
+                    axios.get("/index/"+this.user.id+"/"+this.user.level+"/"+this.type).then(res=>{
+                        let myChart = echarts.init(document.getElementById('left'));
+                        let option=this.option;
+                        option.title.text='某类销量';
+                        option.series[0].data=res.data.data;
+                        myChart.setOption(this.option);
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

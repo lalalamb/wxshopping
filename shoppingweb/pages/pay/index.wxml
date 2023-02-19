@@ -1,0 +1,7 @@
+<view class="login_title">余额充值</view>
+  <view class="input_view">
+    <input class="input_text" placeholder="请输入金额" type="number" value="{{recharge}}" bindinput="onPrice"/>
+  </view>
+  <view class="loginBrnView">
+    <button class="loginBtn" type="primary" bindtap="recharge">充值</button>
+  </view>
