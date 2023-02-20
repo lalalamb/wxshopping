@@ -223,8 +223,8 @@ public class OrderInfoService {
      * @param orderId   订单id
      */
     public void deleteOrder (Long orderId){
-        orderInfoMapper.deleteById(orderId);
-        orderGoodsRelService.deleteRelByOrderId(orderId);
+         orderGoodsRelService.deleteRelByOrderId(orderId);
+       orderInfoMapper.deleteById(orderId);
     }
 
     /**
